@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/Mr-Malomz/skintech_be/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,9 @@ func main() {
 			"data": "Hello World",
 		})
 	})
+
+	//run database
+	models.ConnectDB()
 
 	r.Run()
 }
