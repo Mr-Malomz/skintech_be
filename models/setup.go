@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -26,6 +27,8 @@ func ConnectDB() {
 	defer client.Disconnect(ctx)
 
 	collection := client.Database("skintech")
+
+	fmt.Println("Connected to MongoDB")
 
 	DB = collection
 }
