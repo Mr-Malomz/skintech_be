@@ -11,9 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var DB *mongo.Database
-
-func ConnectDB() {
+func ConnectDB() *mongo.Client {
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(config.EnvMongoURI()))
 	if err != nil {
@@ -26,9 +24,17 @@ func ConnectDB() {
 	}
 	defer client.Disconnect(ctx)
 
-	collection := client.Database("skintech")
-
 	fmt.Println("Connected to MongoDB")
 
-	DB = collection
+	return client
+}
+
+//Client instance
+var DB *mongo.Client = ConnectDB()
+
+//getting database collections
+func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
+	collection := client.Database("skintech").Collection(collectionName)
+
+	return collection
 }
