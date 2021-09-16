@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Mr-Malomz/skintech_be/models"
+	"github.com/Mr-Malomz/skintech_be/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,12 @@ func main() {
 
 	//run database
 	models.ConnectDB()
+
+	//routes
+	routes.AuthRoute(r)
+	routes.UserRoute(r)
+	routes.ImageRoute(r)
+	routes.CollectionRoute(r)
 
 	r.Run()
 }
