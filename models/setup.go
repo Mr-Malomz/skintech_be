@@ -24,6 +24,11 @@ func ConnectDB() *mongo.Client {
 	}
 	defer client.Disconnect(ctx)
 
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	fmt.Println("Connected to MongoDB")
 
 	return client

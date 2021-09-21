@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -35,7 +36,7 @@ func verifyPassword(hashedPassword string, userPassword string) bool {
 //signup
 func SignUp() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
 		var user models.User
 
 		//validate the request body
@@ -47,6 +48,7 @@ func SignUp() gin.HandlerFunc {
 		//use the validator library to validate required fields
 		if validationErr := validate.Struct(user); validationErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+			return
 		}
 
 		//check if email already exist on the database
@@ -62,5 +64,27 @@ func SignUp() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "This email already exist"})
 			return
 		}
+
+		//hashing the password
+		password := hashPassword(user.Password)
+
+		//creating a user
+		user.Password = password
+		user.Id = primitive.NewObjectID()
+		user.Firstname = c.PostForm("firstname")
+		user.Lastname = c.PostForm("lastname")
+		user.Email = c.PostForm("email")
+		user.Created_At = time.Now()
+		user.IsActive = false
+		user.IsVerified = false
+
+		_, insertErr := userCollection.InsertOne(ctx, user)
+		if insertErr != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating user"})
+			return
+		}
+		defer cancel()
+
+		c.JSON(http.StatusOK, gin.H{"message": `User created successfully!`})
 	}
 }

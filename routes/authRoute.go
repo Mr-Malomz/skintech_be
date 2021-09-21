@@ -5,6 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthRoute(r *gin.Engine)  {
-	r.POST("users/signup", controllers.SignUp())
+func AuthRoute(r *gin.Engine) {
+	r.POST("/users/signup", controllers.SignUp())
 }
