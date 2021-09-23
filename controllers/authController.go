@@ -65,20 +65,19 @@ func SignUp() gin.HandlerFunc {
 			return
 		}
 
-		//hashing the password
-		password := hashPassword(user.Password)
-
 		//creating a user
-		user.Password = password
-		user.Id = primitive.NewObjectID()
-		user.Firstname = c.PostForm("firstname")
-		user.Lastname = c.PostForm("lastname")
-		user.Email = c.PostForm("email")
-		user.Created_At = time.Now()
-		user.IsActive = false
-		user.IsVerified = false
+		newUser := models.User{
+			Password:   hashPassword(user.Password),
+			Id:         primitive.NewObjectID(),
+			Firstname:  user.Firstname,
+			Lastname:   user.Lastname,
+			Email:      user.Email,
+			Created_At: time.Now(),
+			IsActive:   false,
+			IsVerified: false,
+		}
 
-		_, insertErr := userCollection.InsertOne(ctx, user)
+		_, insertErr := userCollection.InsertOne(ctx, newUser)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating user"})
 			return
