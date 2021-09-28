@@ -66,20 +66,21 @@ func SignUp() gin.HandlerFunc {
 		}
 
 		//creating a user
+		created_Date, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		newUser := models.User{
 			Password:   hashPassword(user.Password),
 			Id:         primitive.NewObjectID(),
 			Firstname:  user.Firstname,
 			Lastname:   user.Lastname,
 			Email:      user.Email,
-			Created_At: time.Now(),
+			Created_At: created_Date,
 			IsActive:   false,
 			IsVerified: false,
 		}
 
 		_, insertErr := userCollection.InsertOne(ctx, newUser)
 		if insertErr != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating user"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": insertErr})
 			return
 		}
 		defer cancel()
