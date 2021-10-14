@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Mr-Malomz/skintech_be/helper"
 	"github.com/Mr-Malomz/skintech_be/models"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -74,6 +75,7 @@ func SignUp() gin.HandlerFunc {
 			Lastname:   user.Lastname,
 			Email:      user.Email,
 			Created_At: created_Date,
+			OTP:        helper.GenerateOTP().String(),
 			IsActive:   false,
 			IsVerified: false,
 		}
@@ -84,6 +86,13 @@ func SignUp() gin.HandlerFunc {
 			return
 		}
 		defer cancel()
+
+		//send otp via email
+		isMailSent := helper.SendEmail(user.Firstname, user.Lastname, user.Email)
+
+		if !isMailSent {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error sending otp"})
+		}
 
 		c.JSON(http.StatusOK, gin.H{"message": `User created successfully!`})
 	}

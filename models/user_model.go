@@ -17,6 +17,7 @@ type User struct {
 	Folio_num      string             `json:"folio_num,omitempty"`
 	School_grad    string             `json:"school_grad,omitempty"`
 	Token          string             `json:"token,omitempty"`
+	OTP            string             `json:"otp,omitempty"`
 	Refresh_token  string             `json:"refresh_token,omitempty"`
 	Year_grad      int                `json:"year_grad,omitempty"`
 	Year_fellow    int                `json:"year_fellow,omitempty"`
