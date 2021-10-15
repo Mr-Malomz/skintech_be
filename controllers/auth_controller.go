@@ -58,12 +58,12 @@ func SignUp() gin.HandlerFunc {
 		defer cancel() //if it exceeds stipulated time, then cancel request
 		if err != nil {
 			log.Panic(err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error occured while checking for email"})
+			c.JSON(http.StatusInternalServerError, dtos.Response{Status: http.StatusInternalServerError, Message: "Error occured while checking for email"})
 			return
 		}
 
 		if count > 0 {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "This email already exist"})
+			c.JSON(http.StatusInternalServerError, dtos.Response{Status: http.StatusInternalServerError, Message: "This email already exist"})
 			return
 		}
 
@@ -90,5 +90,55 @@ func SignUp() gin.HandlerFunc {
 		defer cancel()
 
 		c.JSON(http.StatusOK, dtos.Response{Status: http.StatusOK, Message: "User created successfully!", Data: nil})
+	}
+}
+
+func Login() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		var user models.User
+		var foundUser models.User
+
+		if err := c.BindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+
+		//check if email exist on the db
+		err := userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
+		defer cancel()
+		if err != nil {
+			c.JSON(
+				http.StatusInternalServerError,
+				dtos.Response{Status: http.StatusInternalServerError, Message: "Incorrect email or password"},
+			)
+			return
+		}
+
+		//check if password is correct
+		isValidPass := verifyPassword(foundUser.Password, user.Password)
+		defer cancel()
+		if !isValidPass {
+			c.JSON(http.StatusInternalServerError,
+				dtos.Response{Status: http.StatusInternalServerError, Message: "Incorrect email or password"},
+			)
+			return
+		}
+
+		//jwt
+
+		//send response
+		resp := models.User{
+			Id:         foundUser.Id,
+			Firstname:  foundUser.Firstname,
+			Lastname:   foundUser.Lastname,
+			Email:      foundUser.Email,
+			Created_At: foundUser.Created_At,
+			OTP:        foundUser.OTP,
+			IsActive:   foundUser.IsActive,
+			IsVerified: foundUser.IsVerified,
+		}
+		c.JSON(http.StatusOK, 
+			dtos.Response{Status: http.StatusOK, Message: "Login successful!", Data: map[string]interface{}{"user": resp, "token": 12323223}},
+		)
 	}
 }
