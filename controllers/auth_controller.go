@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Mr-Malomz/skintech_be/dtos"
 	"github.com/Mr-Malomz/skintech_be/helper"
 	"github.com/Mr-Malomz/skintech_be/models"
 	"github.com/gin-gonic/gin"
@@ -67,6 +68,7 @@ func SignUp() gin.HandlerFunc {
 		}
 
 		//creating a user
+		otp := helper.GenerateOTP().String()
 		created_Date, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		newUser := models.User{
 			Password:   hashPassword(user.Password),
@@ -75,7 +77,7 @@ func SignUp() gin.HandlerFunc {
 			Lastname:   user.Lastname,
 			Email:      user.Email,
 			Created_At: created_Date,
-			OTP:        helper.GenerateOTP().String(),
+			OTP:        otp,
 			IsActive:   false,
 			IsVerified: false,
 		}
@@ -87,13 +89,6 @@ func SignUp() gin.HandlerFunc {
 		}
 		defer cancel()
 
-		//send otp via email
-		isMailSent := helper.SendEmail(user.Firstname, user.Lastname, user.Email)
-
-		if !isMailSent {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "error sending otp"})
-		}
-
-		c.JSON(http.StatusOK, gin.H{"message": `User created successfully!`})
+		c.JSON(http.StatusOK, dtos.Response{Status: http.StatusOK, Message: "User created successfully!", Data: nil})
 	}
 }

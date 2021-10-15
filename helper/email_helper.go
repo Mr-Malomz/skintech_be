@@ -14,7 +14,7 @@ type infos struct {
 	OTP  string
 }
 
-func SendEmail(firstname string, lastname string, email string) bool {
+func SendEmail(firstname string, lastname string, email string, otp string) bool {
 
 	t, err := template.ParseFiles("template.html")
 
@@ -22,7 +22,7 @@ func SendEmail(firstname string, lastname string, email string) bool {
 		log.Panic(err)
 	}
 
-	var info infos = infos{Name: firstname + lastname, OTP: GenerateOTP().String()}
+	var info infos = infos{Name: firstname + lastname, OTP: otp}
 
 	var tpl bytes.Buffer
 	if err := t.Execute(&tpl, info); err != nil {
@@ -39,7 +39,7 @@ func SendEmail(firstname string, lastname string, email string) bool {
 	m.SetBody("text/html", result)
 	m.Attach("template.html")
 
-	d := gomail.NewDialer("smtp.gmail.com", 587, "no-reply@skintech.io", config.EnvEmailPassword())
+	d := gomail.NewDialer("smtp.skintech.com", 587, "no-reply@skintech.io", config.EnvEmailPassword())
 
 	// Send the email to Bob, Cora and Dan.
 	if err := d.DialAndSend(m); err != nil {
