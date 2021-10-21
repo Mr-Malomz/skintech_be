@@ -125,6 +125,13 @@ func Login() gin.HandlerFunc {
 		}
 
 		//jwt
+		token, refreshToken, err := helper.GenerateToken(foundUser.Id.String(), foundUser.Firstname, foundUser.Lastname, foundUser.Email)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,
+				dtos.Response{Status: http.StatusInternalServerError, Message: "Error generating auth token"},
+			)
+			return
+		}
 
 		//send response
 		resp := models.User{
@@ -133,11 +140,12 @@ func Login() gin.HandlerFunc {
 			Lastname:   foundUser.Lastname,
 			Email:      foundUser.Email,
 			Created_At: foundUser.Created_At,
-			OTP:        foundUser.OTP,
+			Token:         token,
+			Refresh_token: refreshToken,
 			IsActive:   foundUser.IsActive,
 			IsVerified: foundUser.IsVerified,
 		}
-		c.JSON(http.StatusOK, 
+		c.JSON(http.StatusOK,
 			dtos.Response{Status: http.StatusOK, Message: "Login successful!", Data: map[string]interface{}{"user": resp}},
 		)
 	}
