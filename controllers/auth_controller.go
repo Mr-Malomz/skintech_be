@@ -135,15 +135,15 @@ func Login() gin.HandlerFunc {
 
 		//send response
 		resp := models.User{
-			Id:         foundUser.Id,
-			Firstname:  foundUser.Firstname,
-			Lastname:   foundUser.Lastname,
-			Email:      foundUser.Email,
-			Created_At: foundUser.Created_At,
+			Id:            foundUser.Id,
+			Firstname:     foundUser.Firstname,
+			Lastname:      foundUser.Lastname,
+			Email:         foundUser.Email,
+			Created_At:    foundUser.Created_At,
 			Token:         token,
 			Refresh_token: refreshToken,
-			IsActive:   foundUser.IsActive,
-			IsVerified: foundUser.IsVerified,
+			IsActive:      foundUser.IsActive,
+			IsVerified:    foundUser.IsVerified,
 		}
 		c.JSON(http.StatusOK,
 			dtos.Response{Status: http.StatusOK, Message: "Login successful!", Data: map[string]interface{}{"user": resp}},
