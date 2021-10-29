@@ -9,27 +9,27 @@ import (
 	"github.com/Mr-Malomz/skintech_be/dtos"
 	"github.com/Mr-Malomz/skintech_be/models"
 	"github.com/gin-gonic/gin"
-
-	// "github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
-	// "go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// var authCollection *mongo.Collection = models.GetCollection(models.DB, "user")
+// var _userCollection *mongo.Collection = models.GetCollection(models.DB, "user")
 
 // var validate = validator.New()
 
 func GetAUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
-		userID := c.Param("userId")
+		userId := c.Param("userId")
 		var user models.User
 
-		err := userCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
+		objId, _ := primitive.ObjectIDFromHex(userId)
+
+		err := userCollection.FindOne(ctx, bson.M{"id": objId}).Decode(&user)
 		defer cancel()
 
 		if err != nil {
-			log.Panic(err)
+			log.Fatal(err)
 			c.JSON(http.StatusInternalServerError, dtos.Response{Status: http.StatusInternalServerError, Message: "User not found"})
 			return
 		}
@@ -53,7 +53,7 @@ func GetAUser() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "Login successful!", Data: map[string]interface{}{"user": foundUser}},
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": foundUser}},
 		)
 	}
 }
