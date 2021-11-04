@@ -13,9 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// var _userCollection *mongo.Collection = models.GetCollection(models.DB, "user")
-
-// var validate = validator.New()
 
 func GetAUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -55,6 +52,12 @@ func GetAUser() gin.HandlerFunc {
 		c.JSON(http.StatusOK,
 			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": foundUser}},
 		)
+	}
+}
+
+func UpdateUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
 	}
 }
 
