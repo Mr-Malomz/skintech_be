@@ -6,6 +6,7 @@ import (
 	"github.com/Mr-Malomz/skintech_be/models"
 	"github.com/Mr-Malomz/skintech_be/routes"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -16,8 +17,15 @@ func main() {
 		})
 	})
 
+	//cors
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}
+
 	//run database
 	models.ConnectDB()
+
+	//middlewares
+	r.Use(cors.New(config))
 
 	//routes
 	routes.AuthRoute(r)

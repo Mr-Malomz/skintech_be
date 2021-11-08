@@ -40,6 +40,6 @@ type jwtMaker struct {
 	secretKey string
 }
 
-func AuthJWTMiddleware(secretKey string) () {
-
+func AuthJWTMiddleware() {
+	// return gin.
 }
