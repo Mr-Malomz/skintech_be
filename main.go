@@ -5,8 +5,8 @@ import (
 
 	"github.com/Mr-Malomz/skintech_be/models"
 	"github.com/Mr-Malomz/skintech_be/routes"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
