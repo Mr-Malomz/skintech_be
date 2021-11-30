@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -178,8 +177,15 @@ func DeleteUserAccount() gin.HandlerFunc {
 			log.Fatal(err)
 		}
 
+		if result.DeletedCount < 1 {
+			c.JSON(http.StatusNotFound,
+				dtos.Response{Status: http.StatusNotFound, Message: "User with specified ID not found!"},
+			)
+			return
+		}
+
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": fmt.Sprintf("User with ID: %d successfully deleted", result.DeletedCount)}},
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": "User successfully deleted!"}},
 		)
 	}
 }
