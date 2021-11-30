@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Mr-Malomz/skintech_be/config"
 	"github.com/Mr-Malomz/skintech_be/dtos"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -24,22 +25,27 @@ func AuthJWTMiddleware() gin.HandlerFunc {
 					if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 						return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 					}
-					return []byte("secret"), nil
+					return []byte(config.EnvJWT()), nil
 				})
 
 				if err != nil {
-					c.JSON(http.StatusForbidden, dtos.Response{Status: http.StatusForbidden, Message: "invalid authorization token"})
-					// c.AbortWithStatus(http.StatusForbidden)
+					c.JSON(http.StatusUnauthorized, dtos.Response{Status: http.StatusUnauthorized, Message: "invalid authorization token"})
+					c.Abort()
+					return
 				}
 
 				if !tkn.Valid {
-					// c.Next()
-					c.JSON(http.StatusForbidden, dtos.Response{Status: http.StatusForbidden, Message: "invalid authorization token"})
-				} 
+					c.JSON(http.StatusUnauthorized, dtos.Response{Status: http.StatusUnauthorized, Message: "invalid authorization token"})
+					c.Abort()
+					return
+				}
+
+				c.Next()
 			}
 		} else {
-			c.JSON(http.StatusForbidden, dtos.Response{Status: http.StatusForbidden, Message: "An authorization header is required"})
-			c.AbortWithStatus(http.StatusForbidden)
+			c.JSON(http.StatusUnauthorized, dtos.Response{Status: http.StatusUnauthorized, Message: "An authorization header is required"})
+			c.Abort()
+			return
 		}
 
 	}
