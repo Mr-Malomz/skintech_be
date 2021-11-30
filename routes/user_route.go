@@ -14,5 +14,6 @@ func UserRoute(r *gin.Engine) {
 		authorized.GET("/users", controllers.GetAllUsers())
 		authorized.GET("/user/:userId", controllers.GetAUser())
 		authorized.POST("/user/:userId", controllers.UpdateUser())
+		authorized.DELETE("/user/:userId", controllers.DeleteUserAccount())
 	}
 }

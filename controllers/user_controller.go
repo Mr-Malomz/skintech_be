@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -165,6 +166,20 @@ func GetAllUsers() gin.HandlerFunc {
 
 func DeleteUserAccount() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		userId := c.Param("userId")
 
+		objId, _ := primitive.ObjectIDFromHex(userId)
+
+		result, err := userCollection.DeleteOne(ctx, bson.M{"id": objId})
+		defer cancel()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		c.JSON(http.StatusOK,
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": fmt.Sprintf("User with ID: %d successfully deleted", result.DeletedCount)}},
+		)
 	}
 }
