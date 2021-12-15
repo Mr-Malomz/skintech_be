@@ -20,6 +20,7 @@ type Images struct {
 	Gender      string             `json:"gender,omitempty" bson:"gender,omitempty" validate:"required, eq=MALE|eq=FEMALE"`
 	Age         int                `json:"age,omitempty" bson:"age,omitempty" validate:"required"`
 	Country     string             `json:"country,omitempty" bson:"country,omitempty" validate:"required"`
+	State       string             `json:"state,omitempty" bson:"state,omitempty" validate:"required"`
 	Comp_desc   string             `json:"comp_desc,omitempty" bson:"comp_desc,omitempty" validate:"required"`
 	Fav_count   int                `json:"fav_count,omitempty" bson:"fav_count,omitempty"`
 	Img_url     string             `json:"img_url,omitempty" bson:"img_url,omitempty" validate:"required"`
