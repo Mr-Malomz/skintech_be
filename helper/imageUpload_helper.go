@@ -11,7 +11,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
-func ImageUploadHelper(file *multipart.FileHeader) (string, error) {
+func ImageUploadHelper(file multipart.File, handler *multipart.FileHeader) (string, error) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
 
 	cld, err := cloudinary.NewFromParams(config.EnvCloudName(), config.EnvCloudAPIKey(), config.EnvCloudAPISecret())
@@ -19,8 +19,8 @@ func ImageUploadHelper(file *multipart.FileHeader) (string, error) {
 		log.Fatal(err)
 		return "", err
 	}
-	
-	uploadURL, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: file.Filename, Folder: "skintech_be"})
+
+	uploadURL, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: handler.Filename, Folder: "skintech_be"})
 	defer cancel()
 	if err != nil {
 		log.Fatal(err)

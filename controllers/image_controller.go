@@ -10,13 +10,13 @@ import (
 
 func UploadImage() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		file, err := c.FormFile("file")
+		file, handler, err := c.Request.FormFile("file")
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, dtos.Response{Status: http.StatusInternalServerError, Message: "Select a file to upload"})
 			return
 		}
 
-		imageUrl, err := helper.ImageUploadHelper(file)
+		imageUrl, err := helper.ImageUploadHelper(file, handler)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, dtos.Response{Status: http.StatusInternalServerError, Message: "Error uploading file"})
 			return
