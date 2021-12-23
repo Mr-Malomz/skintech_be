@@ -146,7 +146,7 @@ func Login() gin.HandlerFunc {
 			IsVerified:    foundUser.IsVerified,
 		}
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "Login successful!", Data: map[string]interface{}{"user": resp}},
+			dtos.Response{Status: http.StatusOK, Message: "Login successful!", Data: map[string]interface{}{"data": resp}},
 		)
 	}
 }

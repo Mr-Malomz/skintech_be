@@ -13,7 +13,7 @@ type Gender struct {
 
 type Images struct {
 	Id          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	UserId      primitive.ObjectID `json:"_userId,omitempty" bson:"_userId,omitempty" validate:"required"`
+	UserId      primitive.ObjectID `json:"userId,omitempty" bson:"userId,omitempty" validate:"required"`
 	Skin_diag   string             `json:"skin_diag,omitempty" bson:"skin_diag,omitempty" validate:"required"`
 	Loc_disease string             `json:"loc_disease,omitempty" bson:"loc_disease,omitempty" validate:"required"`
 	Dif_diag    string             `json:"dif_diag,omitempty" bson:"dif_diag,omitempty" validate:"required"`

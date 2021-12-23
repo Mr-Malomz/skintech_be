@@ -49,7 +49,7 @@ func GetAUser() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": foundUser}},
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"data": foundUser}},
 		)
 	}
 }
@@ -109,7 +109,7 @@ func UpdateUser() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": newUpdatedUser}},
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"data": newUpdatedUser}},
 		)
 	}
 }
@@ -158,7 +158,7 @@ func GetAllUsers() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"users": users}},
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"data": users}},
 		)
 	}
 }
@@ -185,7 +185,7 @@ func DeleteUserAccount() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK,
-			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"user": "User successfully deleted!"}},
+			dtos.Response{Status: http.StatusOK, Message: "success!", Data: map[string]interface{}{"data": "User successfully deleted!"}},
 		)
 	}
 }
