@@ -17,7 +17,7 @@ type Images struct {
 	Skin_diag   string             `json:"skin_diag,omitempty" bson:"skin_diag,omitempty" validate:"required"`
 	Loc_disease string             `json:"loc_disease,omitempty" bson:"loc_disease,omitempty" validate:"required"`
 	Dif_diag    string             `json:"dif_diag,omitempty" bson:"dif_diag,omitempty" validate:"required"`
-	Gender      string             `json:"gender,omitempty" bson:"gender,omitempty" validate:"required, eq=MALE|eq=FEMALE"`
+	// Gender      string             `json:"gender,omitempty" bson:"gender,omitempty" validate:"required, oneof='MALE' 'FEMALE'"`
 	Age         int                `json:"age,omitempty" bson:"age,omitempty" validate:"required"`
 	Country     string             `json:"country,omitempty" bson:"country,omitempty" validate:"required"`
 	State       string             `json:"state,omitempty" bson:"state,omitempty" validate:"required"`

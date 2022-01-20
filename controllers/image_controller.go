@@ -22,7 +22,7 @@ func UploadImage() gin.HandlerFunc {
 		var image models.Images
 
 		if err := c.BindJSON(&image); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 			return
 		}
 
@@ -47,7 +47,7 @@ func UploadImage() gin.HandlerFunc {
 			return
 		}
 		defer file.Close()
-
+ 
 		imageUrl, err := helper.ImageUploadHelper(file, handler)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, dtos.Response{Status: http.StatusInternalServerError, Message: "Error uploading file"})
@@ -60,7 +60,7 @@ func UploadImage() gin.HandlerFunc {
 			Skin_diag:   image.Skin_diag,
 			Loc_disease: image.Loc_disease,
 			Dif_diag:    image.Dif_diag,
-			Gender:      image.Gender,
+			// Gender:      image.Gender,
 			Age:         image.Age,
 			Country:     image.Country,
 			State:       image.State,
