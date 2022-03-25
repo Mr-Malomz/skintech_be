@@ -27,5 +27,5 @@ func ImageUploadHelper(file multipart.File, handler *multipart.FileHeader) (stri
 		return "", err
 	}
 
-	return uploadURL.SecureURL, err
+	return uploadURL.SecureURL, nil
 }

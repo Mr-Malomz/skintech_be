@@ -60,12 +60,12 @@ func UploadImage() gin.HandlerFunc {
 			Skin_diag:   image.Skin_diag,
 			Loc_disease: image.Loc_disease,
 			Dif_diag:    image.Dif_diag,
-			// Gender:      image.Gender,
+			Gender:      image.Gender,
 			Age:         image.Age,
 			Country:     image.Country,
 			State:       image.State,
 			Comp_desc:   image.Comp_desc,
-			Fav_count:   0,
+			Fav_count:   image.Fav_count,
 			Img_url:     imageUrl,
 		}
 
